@@ -12,7 +12,7 @@ def build_mlp(input_placeholder, output_size, scope, n_layers, size, activation=
         arguments:
             input_placeholder: placeholder variable for the state (batch_size, input_size)
             scope: variable scope of the network
-
+            
             n_layers: number of hidden layers
             size: dimension of each hidden layer
             activation: activation of each hidden layer
@@ -22,12 +22,17 @@ def build_mlp(input_placeholder, output_size, scope, n_layers, size, activation=
 
         returns:
             output_placeholder: the result of a forward pass through the hidden layers + the output layer
+            
+        doubts:
+            scope: what is it ?
     """
     output_placeholder = input_placeholder
     with tf.variable_scope(scope):
         for _ in range(n_layers):
-            output_placeholder = TODO # HINT: use tf.layers.dense (specify <input>, <size>, activation=<?>)
-        output_placeholder = TODO # HINT: use tf.layers.dense (specify <input>, <size>, activation=<?>)
+            output_placeholder = tf.layers.dense(output_placeholder, output_size=size, activation=activation) 
+            # HINT: use tf.layers.dense (specify <input>, <size>, activation=<?>)
+        output_placeholder = tf.layers.dense(output_placeholder, output_size=output_size, activation=activation) 
+        # HINT: use tf.layers.dense (specify <input>, <size>, activation=<?>)
     return output_placeholder
 
 

@@ -72,7 +72,7 @@ class RL_Trainer(object):
 
         ## TODO initialize all of the TF variables (that were created by agent, etc.)
         ## HINT: use global_variables_initializer
-        TODO
+        self.sess.run(tf.global_variables_initializer())
 
     def run_training_loop(self, n_iter, collect_policy, eval_policy,
                         initial_expertdata=None, relabel_with_expert=False,
@@ -105,6 +105,9 @@ class RL_Trainer(object):
                 self.log_metrics = True
             else:
                 self.log_metrics = False
+
+
+            # int itr: [0, n_iter)
 
             # collect trajectories, to be used for training
             training_returns = self.collect_training_trajectories(itr,
@@ -157,11 +160,16 @@ class RL_Trainer(object):
 
                 # collect data, batch_size is the number of transitions you want to collect.
 
+        if itr==0:
+            with open(load_initial_expertdata, 'rb') as f:
+                loaded_paths=pickle.loads(f.read())
+            return loaded_paths, 0, None
+
         # TODO collect data to be used for training
         # HINT1: use sample_trajectories from utils
         # HINT2: you want each of these collected rollouts to be of length self.params['ep_len']
         print("\nCollecting data to be used for training...")
-        paths, envsteps_this_batch = TODO
+        paths, envsteps_this_batch = sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
 
         # collect more rollouts with the same policy, to be saved as videos in tensorboard
         # note: here, we collect MAX_NVIDEO rollouts, each of length MAX_VIDEO_LEN
@@ -193,6 +201,9 @@ class RL_Trainer(object):
         # TODO relabel collected obsevations (from our policy) with labels from an expert policy
         # HINT: query the policy (using the get_action function) with paths[i]["observation"]
         # and replace paths[i]["action"] with these expert labels
+
+        for path in paths:
+            path["action"]=expert_policy.get_action(path["observation"])
 
         return paths
 
