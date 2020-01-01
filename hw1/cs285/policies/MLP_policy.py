@@ -88,9 +88,9 @@ class MLPPolicy(BasePolicy):
         # HINT2: the tensor we're interested in evaluating is self.sample_ac
         # HINT3: in order to run self.sample_ac, it will need observation fed into the feed_dict
         
-        self.sess.run(self.sample_ac, feed_dict = {self.observations_pl: obs})
-        return self.sample_ac
-
+        sample_ac_np = self.sess.run(self.sample_ac, feed_dict = {self.observations_pl: obs})
+        return sample_ac_np
+        
     # update/train this policy
     def update(self, observations, actions):
         raise NotImplementedError

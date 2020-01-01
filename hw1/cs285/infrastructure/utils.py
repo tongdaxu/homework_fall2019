@@ -29,8 +29,8 @@ def sample_trajectory(env, policy, max_path_length, render=False, render_mode=('
 
         # use the most recent ob to decide what to do
         obs.append(ob)
-        ac = policy.get_action(obs) # HINT: query the policy's get_action function
-        # Not sure about the type here
+        ac = policy.get_action(np.array(obs, dtype=np.float32)) # HINT: query the policy's get_action function
+        # what should be the type of action ?
         ac = ac[0]
         acs.append(ac)
 
